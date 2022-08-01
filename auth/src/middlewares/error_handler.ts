@@ -8,7 +8,7 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
             errors: err.serializeErrors()
         });
     }
-
+    
     res.status(400).send({
         errors: [{ message: 'Something went wrong' }]
     });

@@ -1,6 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
+import mongoose from 'mongoose';
 
 // Routers
 import { signinRouter } from './routes/signin';
@@ -27,9 +28,20 @@ app.all('*', async (req, res, next) => {
     throw new NotFoundError();
 });
 
-// Setup middleware
+// Setup error handler middleware
 app.use(errorHandler);
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}!`)
-});
+const start = async() => {
+    const dbName = 'auth';
+    try {
+        await mongoose.connect(`mongodb://auth-mongo-srv:27017/${dbName}`);
+        console.log(`Connected to ${dbName} database`);
+    } catch (err) {
+        console.error(err);
+    }
+    app.listen(port, () => {
+        console.log(`Auth service on port ${port}!`)
+    });
+};
+
+start();
