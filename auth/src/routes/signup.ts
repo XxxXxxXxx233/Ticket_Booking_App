@@ -1,12 +1,15 @@
-import express, { Request, Response } from 'express'
-import { body, validationResult } from 'express-validator';
+import express, { Request, Response } from 'express';
+import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
 
+// Models
 import { User } from '../models/user';
 
+// Middlewares
+import { validateRequest } from '../middlewares/validate_request';
+
+// Errors
 import { BadRequestError } from '../errors/bad_request_error';
-import { RequestValidationError } from '../errors/request_validation_error';
-import { DatabaseConnectionError } from '../errors/database_connection_error';
 
 const router = express.Router();
 
@@ -20,13 +23,9 @@ router.post(
             .trim()
             .isLength({min: 4, max: 20})
             .withMessage('Password must be between 4 and 20 characters')
-    ], 
+    ],
+    validateRequest,
     async (req: Request, res: Response) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            throw new RequestValidationError(errors.array());
-        }
-
         const { email, password } = req.body;
         const existingUser = await User.findOne({ email: email });
         if (existingUser) {
@@ -38,6 +37,7 @@ router.post(
             password
         });
         await user.save();
+        
         // Generate JWT and store it in req.sesson
         const userJwt = jwt.sign(
             {
@@ -51,6 +51,7 @@ router.post(
         };
 
         res.status(201).send(user);
-});
+    }
+);
 
 export { router as signupRouter };
