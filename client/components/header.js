@@ -19,13 +19,11 @@ const header = ({ currentUser }) => {
         });
 
     return (
-        <nav className='navbar navbar-expand-lg bg-light'>
+        <nav className='navbar navbar-expand-sm bg-light'>
             <div className='container-fluid'>
-
                 <Link href='/'>
                     <a className='navbar-brand'>GitTix</a>
                 </Link>
-
                 <div className='collapse navbar-collapse justify-content-end'>
                     <ul className='navbar-nav'>
                         {links}

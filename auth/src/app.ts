@@ -2,6 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
+import { errorHandler, NotFoundError } from '@richardcap/common';
 
 // Routers
 import { signinRouter } from './routes/signin';
@@ -9,9 +10,6 @@ import { signoutRouter } from './routes/signout';
 import { signupRouter } from './routes/signup';
 import { currentUserRouter } from './routes/current_user';
 
-// Middlewares
-import { errorHandler } from './middlewares/error_handler';
-import { NotFoundError } from './errors/not_found_error';
 
 const app = express();
 const port = 3000;
