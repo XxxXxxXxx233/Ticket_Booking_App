@@ -6,7 +6,6 @@ import { validateRequest, BadRequestError } from '@richardcap/common';
 // Models
 import { User } from '../models/user';
 
-
 const router = express.Router();
 
 router.post(
