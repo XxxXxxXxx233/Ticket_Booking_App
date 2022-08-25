@@ -2,6 +2,7 @@
 
 import nats, { Message } from 'node-nats-streaming';
 import { randomBytes } from 'crypto';
+import { TicketCreatedPublisher } from './events/ticket_created_publisher'
 
 console.clear();
 
@@ -9,7 +10,7 @@ const stan = nats.connect('ticketing', randomBytes(4).toString('hex'), {
     url: 'http://localhost:4222'
 });
 
-stan.on('connect', () => {
+stan.on('connect', async () => {
     console.log('Publisher connected to NATS');
 
     const data = {
@@ -17,7 +18,10 @@ stan.on('connect', () => {
         title: 'concert',
         price: 20
     };
-    stan.publish('ticket:created', JSON.stringify(data), () => {
-        console.log('Event published');
-    })
+    const publisher = new TicketCreatedPublisher(stan);
+    try {
+        await publisher.publish(data);
+    } catch (err) {
+        console.error(err);
+    }
 });
