@@ -5,7 +5,7 @@ const client = ({ req }) => {
         // Server
         // http://ServiceName.Namespace.svc.cluster.local
         return axios.create({
-            baseURL: 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
+            baseURL: 'http://www.ticketing-by-xx.xyz',
             headers: req.headers
         });
     } else {
